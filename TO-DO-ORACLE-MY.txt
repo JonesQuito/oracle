@@ -1,0 +1,129 @@
+
+	1 - CONECTAR AO SERVIDOR VIA SSH
+ssh root@192.168.56.101
+ssh oracle@192.168.56.101
+
+
+	2 - COLOCANDO O IP FIXO
+vi /etc/hosts
+
+
+	3 - CONFIGURAÇÃO DO /etc/hosts
+# CONFIGURAÇÃO REFERENTE AO ORACLE
+192.168.56.101	localhost.localdomain localhost
+# FIM DA CONFIGURAÇÃO REFERENTE AO ORACLE
+
+
+	4 - CONFIGURANDO O KERNEL 'vi /etc/sysctl.conf'
+# CONFIGURANDO O KERNEL
+fs.suid_dumpable = 1
+fs.aio-max-nr =1048576
+fs.file-max = 6815744
+kernel.shmall = 2097152
+kernel.shmmax = 536870912
+kernel.shmmni = 4096
+kernel.sem = 250 32000 100 128
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_default = 262144
+net.core.wmem_max = 1048586
+# FIM DA CONFIGURAÇÃO DO KERNEL
+
+
+	5 - CONFIRMANDO E ATUALIZANDO O KERNEL
+/sbin/sysctl -p /etc/sysctl.conf
+
+
+	6 - VERIFICANDO AS CONFIGURAÇÕES DO KERNEL
+/sbin/sysctl -a
+
+
+	7 - ARQUIVOS DE LIMITE
+'vi /etc/security/limits.conf'
+# CONFIGURAÇÃO REFERENTE AO ORACLE
+oracle 		soft 		nproc 	2047
+oracle 		hard 		nproc 	16384
+oracle 		soft 		nofile 	4096
+oracle 		hard 		nofile 	65536
+oracle 		soft 		stack 	10240
+# FIM DA CONFIGURAÇÃO REFERENTE AO ORACLE
+
+
+	8 - EDITAR O DIRETÓRIO DE LOGIN
+'vi /etc/pam.d/login'
+# CONFIGURAÇÃO DO ORACLE
+session	required	/lib/security/pam_limits.so'
+# FIM DA CONFIGURAÇÃO DO ORACLE
+
+
+	9 - DESABILITAR O MÓDULO DE SEGURANÇA
+'vi /etc/selinux/config'
+# CONFIGURAÇÃO DO ORACLE
+SELINUX=disabled
+# FIM DA CONFIGURAÇÃO DO ORACLE
+
+
+	10 - INSTALAR OS PACOTES time 3:43
+	10.1 - MONTAR A IMAGEM DO LINUX NA MÁQUINA VIRTUAL
+	10.2 - ENTRAR NO CD PELO MOBAXTERM
+'cd Oracle\ Linux\ Server\ dvd\ 20110119/'
+	10.3 - VERIFICAR O CONTEÚDO DO CD
+'ls -lart'
+	10.4 - ENTRAR NA PASTA SERVER
+'cd Server'
+		
+		
+	10.5 - INSTALAR UM POR UM DOS PACOTES ABAIXO:
+rpm -Uvh binutils-2.*
+rpm -Uvh compat-libstdc++-33*
+rpm -Uvh compat-libstdc++-33*.i386.rpm
+rpm -Uvh elfutils-libelf*
+rpm -Uvh gcc-4.*
+rpm -Uvh gcc-c++-4.*
+rpm -Uvh glibc-2.*
+rpm -Uvh glibc-common-2.*
+rpm -Uvh glibc-devel-2.*
+rpm -Uvh glibc-headers-2.*
+rpm -Uvh ksh*
+rpm -Uvh libaio-0.*
+rpm -Uvh libaio-devel-0.*
+rpm -Uvh libgomp-4.*
+rpm -Uvh libgcc-4.*
+rpm -Uvh libstdc++-4.*
+rpm -Uvh libstdc++-devel-4.*
+rpm -Uvh make-3.*
+rpm -Uvh sysstat-7.*
+rpm -Uvh unixODBC-2.*
+rpm -Uvh unixODBC-devel-2.*
+rpm -Uvh numactl-devel-*
+
+
+	11 - CRIANDO OS GRUPOS DE USUÁRIO
+'groupadd oinstall'
+'groupadd dba'
+'groupadd oper'
+
+
+	12 - CRIANDO O USUÁRIO ORACLE PARA INSTALAÇÃO
+'useradd -g oinstall -G dba oracle'
+
+
+	13 - DEFININDO A SENHA DO USUÁRIO oracle
+'passwd oracle'
+INFORMAR UMA SENHA - POR EXEMPLO: oracle
+
+
+	14 - CRIANDO OS DIRETÓRIOS DE INSTALAÇÃO DO ORACLE
+'mkdir /u01/app/oracle/product/11.2.0/db_home1'
+'chown -R oracle.oinstall /u01
+
+
+	15 - DEFININDO LOCALHOST PARA O X
+'xhost +localhost'
+
+
+
+
+
+
